@@ -95,17 +95,13 @@ void menu(int* v, int tamanho_vetor) {
 
             case 2:
                 mede_tempo(v, tamanho_vetor);
-                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
-                scanf("%d", &cond);
                 break;
 
             // Rodar 10x e calcular o desvio padrão
             case 3:
                 /* Código */
-                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
-                scanf("%d", &cond);
                 break;
 
             case 4:
@@ -119,7 +115,7 @@ void menu(int* v, int tamanho_vetor) {
             // Gráfico
             case 5:
                 /* Código */
-                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
+               // printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &cond);
                 break;
