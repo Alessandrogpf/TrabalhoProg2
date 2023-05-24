@@ -46,8 +46,7 @@ void mede_tempo(int* vetor, int tamanho_vetor){
 }
 
 // Gera um vetor aleatório
-int* vetor_random(int* vetor, int tamanho_vetor, int i){
-    vetor = (int *) calloc(tamanho_vetor, sizeof(int));
+void vetor_random(int* vetor, int tamanho_vetor, int i){
     // Gera número aleatórios e os adiciona dentro do vetor
     srand((unsigned) time(NULL));
     printf("\nVetor não ordenado:\n");
@@ -55,11 +54,10 @@ int* vetor_random(int* vetor, int tamanho_vetor, int i){
         vetor[i] = rand() % 10;
         printf("pos[%d] = %d\n", i, vetor[i]);
     }
-    return vetor;
 }
 // --------------------------------------------------------------------------------
 
-void menu(int v, int tamanho_vetor){
+void menu(int* v, int tamanho_vetor){
     int op, cond = 1;
 
     while(cond == 1){
@@ -121,14 +119,17 @@ void menu(int v, int tamanho_vetor){
 }
 
 int main(){
-    int tamanho_vetor, i, v;
-    int* vetor;
+    int tamanho_vetor, i;
+    int* vetor; int* v;
 
     printf("Por favor, digite um tamanho para o vetor: ");
     scanf("%d", &tamanho_vetor);
+    vetor = (int *) calloc(tamanho_vetor, sizeof(int));
 
-    v = vetor_random(vetor, tamanho_vetor, i);
+    vetor_random(vetor, tamanho_vetor, i);
+    v = vetor;
     menu(v, tamanho_vetor);
 
+    free(vetor);
     return 0;
 }
