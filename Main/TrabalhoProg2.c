@@ -57,10 +57,10 @@ void vetor_random(int* vetor, int tamanho_vetor, int i){
 }
 // --------------------------------------------------------------------------------
 
-void menu(int* v, int tamanho_vetor){
+void menu(int* v, int tamanho_vetor) {
     int op, cond = 1;
 
-    while(cond == 1){
+    while (cond == 1) {
         printf("\n-------------- Bem vindo ao menu! --------------------\n");
         printf("Esse programa realiza a ordenação de um vetor e avalia o tempo de execução\n");
         printf("\n1 - Ordenar vetor\n");
@@ -73,50 +73,65 @@ void menu(int* v, int tamanho_vetor){
         scanf("%d", &op);
         printf("------------------------------------------------------");
 
-        switch (op)
-        {   
+        switch (op) {
             case 1:
                 int op_ord;
-                //printf("------------------------------------------------------");
                 printf("\n1 - Selection Sort\n");
                 printf("2 - Insertion Sort\n");
                 printf("3 - Merge Sort\n");
                 printf("4 - Quick Sort\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &op_ord);
-                switch(op_ord)
-                {
+                switch (op_ord) {
                     case 1:
                         selection_sort(v, tamanho_vetor);
                         break;
                     // Adicionar as outras funções conforme forem implementadas;
                 }
+                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
+                printf("Escolha uma das ordenações acima: ");
+                scanf("%d", &cond);
                 break;
 
             case 2:
                 mede_tempo(v, tamanho_vetor);
+                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
+                printf("Escolha uma das ordenações acima: ");
+                scanf("%d", &cond);
                 break;
+
             // Rodar 10x e calcular o desvio padrão
             case 3:
                 /* Código */
+                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
+                printf("Escolha uma das ordenações acima: ");
+                scanf("%d", &cond);
                 break;
 
             case 4:
-                //printf("------------------------------------------------------");
                 printf("\nDigite o novo tamanho: ");
                 scanf("%d", &tamanho_vetor);
+                free(v);
+                v = (int *)calloc(tamanho_vetor, sizeof(int));
+                vetor_random(v, tamanho_vetor, 0);
                 break;
+
             // Gráfico
             case 5:
                 /* Código */
+                printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
+                printf("Escolha uma das ordenações acima: ");
+                scanf("%d", &cond);
                 break;
 
             case 0:
                 printf("\nPrograma encerrado!\n");
                 cond = 0;
+                break;
         }
     }
 }
+
 
 int main(){
     int tamanho_vetor, i;
