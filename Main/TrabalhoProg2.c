@@ -5,10 +5,36 @@
 #define MAX INT_MAX
 
 
+int particiona(int* A, int r){
+    int p = 0;
+    int x = A[r];
+    int i = p-1, j, temp;
+    for(j = p; j<r; j++){
+        if(A[j] <= x){
+            i++;
+            temp = A[i];
+            A[j] = temp;
+
+        }
+    }
+    temp = A[i+1];
+    A[i+1] = A[r];
+    A[r] = temp;
+    return i+1;
+}
+
+
 int* bubble_sort(int* vetor, int tamanho_vetor){
 
+
 }
-int* quick_sort(int* vetor, int tamanho_vetor){
+int* quick_sort(int* vetor,  int tamanho_vetor){
+    int p = 0;
+    if(p >= tamanho_vetor) return;
+    int q = particiona(vetor, q-1);
+    quick_sort(vetor, q-1);
+    quick_sort(vetor, q+1, tamanho_vetor);
+
 
 }
 int* merge_sort(int* vetor, int p, int q, int r){
@@ -23,7 +49,7 @@ int* merge_sort(int* vetor, int p, int q, int r){
     for(i =0; i<n1; i++){
         L[i] = vetor[p+i];
     }
-    for(j = 0; j<n2, j++){
+    for(j = 0; j<n2; j++){
         R[j] = vetor[q+j+1];
     }
     L[n1] = R[n2] = MAX;
@@ -141,7 +167,7 @@ void menu(int* v, int tamanho_vetor) {
                         merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
                         break;
                     case 4:
-                        quick_sort(v, tamanho_vetor);
+                        quick_sort(v, 0, tamanho_vetor);
                     case 5:
                         bubble_sort(v, tamanho_vetor);
                         break;
