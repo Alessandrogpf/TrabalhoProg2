@@ -1,6 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include<limits.h>
+#define MAX INT_MAX
+
+
+int* bubble_sort(int* vetor, int tamanho_vetor){
+
+}
+int* quick_sort(int* vetor, int tamanho_vetor){
+
+}
+int* merge_sort(int* vetor, int p, int q, int r){
+    int i, j, k;
+    int n1 = q - p + 1;
+    int n2 = r - q;
+    int* L;
+    int* R;
+    L = (int*) malloc((n1 +1)*sizeof(int));
+    R = (int*) malloc((n2 + 1)*sizeof(int));
+
+    for(i =0; i<n1; i++){
+        L[i] = vetor[p+i];
+    }
+    for(j = 0; j<n2, j++){
+        R[j] = vetor[q+j+1];
+    }
+    L[n1] = R[n2] = MAX;
+    i = j = 0;
+    for(k=p; k<=r; k++){
+        if(L[i] <= R[j]){
+            vetor[k] = L[i];
+            i++;
+        } else{ 
+            vetor[k] = R[j];
+            j++;
+        }
+    }
+    free(L);
+    free(R);
+    return vetor;
+}
+
+int* insertion_sort(int* vetor, int tamanho_vetor){
+
+}
+
 
 // Essa função ordena um vetor utilizando o método Selection Sort
 int* selection_sort(int* vetor, int tamanho_vetor){
@@ -80,6 +125,7 @@ void menu(int* v, int tamanho_vetor) {
                 printf("2 - Insertion Sort\n");
                 printf("3 - Merge Sort\n");
                 printf("4 - Quick Sort\n");
+                printf("5 - Bubble Sort\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &op_ord);
                 switch (op_ord) {
@@ -87,6 +133,19 @@ void menu(int* v, int tamanho_vetor) {
                         selection_sort(v, tamanho_vetor);
                         break;
                     // Adicionar as outras funções conforme forem implementadas;
+                
+                    case 2:
+                        insertion_sort(v, tamanho_vetor);
+                        break;
+                    case 3:
+                        merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
+                        break;
+                    case 4:
+                        quick_sort(v, tamanho_vetor);
+                    case 5:
+                        bubble_sort(v, tamanho_vetor);
+                        break;
+                
                 }
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
