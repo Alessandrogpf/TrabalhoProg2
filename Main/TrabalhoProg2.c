@@ -76,7 +76,19 @@ int* merge_sort(int* vetor, int p, int q, int r){
 }
 
 int* insertion_sort(int* vetor, int tamanho_vetor){
+    int i, j, chave;
+    for (i  = 1; i < tamanho_vetor; i++) {
+        chave = vetor[i];
+        j = i - 1;
+        
+        while (j >= 0 && vetor[j] > chave){
+            vetor[j + 1] = vetor[j];
+            j = j - 1;
+        }
 
+        vetor[j + 1] = chave;
+    }
+    return vetor;
 }
 
 
