@@ -1,8 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include <limits.h>
 #define MAX INT_MAX
+
+// Protótipos de função
+int particiona(int* A, int p, int r);
+int* bubble_sort(int* vetor, int tamanho_vetor);
+int* quick_sort(int* vetor, int p, int r);
+int* merge_sort(int* vetor, int p, int r);
+int* insertion_sort(int* v, int tamanho_vetor);
+int* selection_sort(int* v, int tamanho_vetor);
+double dp(int* v, int tamanho_vetor);
+double tempo_selection(int* v, int tamanho_vetor);
+double tempo_insertion(int* v, int tamanho_vetor);
+void vetor_random(int* vetor, int tamanho_vetor, int i);
+void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion);
 
 /* Ajustar
 int particiona(int* A, int p, int r){
@@ -114,10 +128,6 @@ int* selection_sort(int* v, int tamanho_vetor){
         v[menor] = troca;
         }
    }
-    printf("\nVetor ordenado:\n");
-    for (i = 0; i < tamanho_vetor; i++){
-        printf("pos[%d] = %d\n", i, v[i]);
-    }
     return v;
 }
 // --------------------------------------------------------------------------------
@@ -132,7 +142,7 @@ double dp(int* v, int tamanho_vetor){
         tempoSelection = tempo_selection(v, tamanho_vetor);
         somaS += tempoSelection;
         mediaS = somaS / 10;
-        desvioP = sqrt(pow());
+        //desvioP = sqrt(pow());
 
         tempoInsertion = tempo_insertion(v, tamanho_vetor);
         somaI += tempoInsertion;
@@ -185,6 +195,16 @@ void vetor_random(int* vetor, int tamanho_vetor, int i){
 }
 // --------------------------------------------------------------------------------
 
+void imprime_selection(int* v, int tamanho_vetor){
+    int i; int* selection;
+    selection = selection_sort(v, tamanho_vetor);
+
+    printf("\nVetor ordenado:\n");
+    for (i = 0; i < tamanho_vetor; i++){
+        printf("pos[%d] = %d\n", i, selection[i]);
+    }
+}
+
 void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion) {
     int op, cond = 1;
 
@@ -203,6 +223,7 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
 
         switch (op) {
             case 1:
+            {
                 int op_ord;
                 printf("\n1 - Selection Sort\n");
                 printf("2 - Insertion Sort\n");
@@ -214,18 +235,19 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 // Switch interno
                 switch (op_ord) {
                     case 1:
-                        selection_sort(v, tamanho_vetor);
+                        imprime_selection(v, tamanho_vetor);
+                        
                         break;
                     case 2:
-                        insertion_sort(v, tamanho_vetor);
+                        imprime_insertion(v, tamanho_vetor);
                         break;
                     case 3:
-                        merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
+                        //merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
                         break;
                     case 4:
-                        quick_sort(v, tamanho_vetor);
+                        //quick_sort(v, tamanho_vetor);
                     case 5:
-                        bubble_sort(v, tamanho_vetor);
+                        //bubble_sort(v, tamanho_vetor);
                         break;
                 
                 }
@@ -233,8 +255,9 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &cond);
                 break;
-
+            }
             case 2:
+            {
                 int op_ord;
                 printf("\n1 - Selection Sort\n");
                 printf("2 - Insertion Sort\n");
@@ -272,7 +295,7 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &cond);
                 break;
-
+            }
             // Rodar 10x e calcular o desvio padrão
             case 3:
                 /* Código */
@@ -307,7 +330,6 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
 int main(){
     int tamanho_vetor, i;
     int* vetor; int* v;
-    double tempoSelection, tempoInsertion;
 
     printf("Por favor, digite um tamanho para o vetor: ");
     scanf("%d", &tamanho_vetor);
@@ -315,11 +337,11 @@ int main(){
 
     vetor_random(vetor, tamanho_vetor, i);
     v = vetor;
-    tempoSelection = tempo_selection(v, tamanho_vetor);
-    tempoInsertion = tempo_insertion(v, tamanho_vetor);
-    menu(v, tamanho_vetor, tempoSelection, tempoInsertion);
+    
+    double tempoSelection = tempo_selection(v, tamanho_vetor);
+    double tempoInsertion = tempo_insertion(v, tamanho_vetor);
 
-   
+    menu(v, tamanho_vetor, tempoSelection, tempoInsertion);
 
     free(vetor);
     return 0;
