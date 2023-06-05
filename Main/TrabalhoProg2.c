@@ -12,38 +12,45 @@
 */
 
 // Protótipos de função
-int particiona(int* A, int p, int r);
 int* bubble_sort(int* vetor, int tamanho_vetor);
 int* quick_sort(int* vetor, int p, int r);
+void imprime_quicksort(int* vetor, int tamanho_vetor);
 int* merge_sort(int* vetor, int p, int r);
 int* insertion_sort(int* v, int tamanho_vetor);
 double tempo_insertion(int* v, int tamanho_vetor);
 void imprime_insertion(int* v, int tamanho_vetor);
 int* selection_sort(int* v, int tamanho_vetor);
 double tempo_selection(int* v, int tamanho_vetor);
+void trocar(int* a, int* b);
+int particiona(int* A, int inicio, int fim);
 void imprime_selection(int* v, int tamanho_vetor);
 void dp(int* v, int tamanho_vetor);
 void vetor_random(int* vetor, int tamanho_vetor, int i);
 void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion);
 // ===================================================================================
 
-/* Ajustar
-int particiona(int* A, int p, int r){
-    int x = A[r];
-    int i = p-1, j, temp;
-    for(j = p; j<r; j++){
-        if(A[j] <= x){
-            i++;
-            temp = A[i];
-            A[j] = temp;
+void trocar(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
+
+// Função de partição do Quick Sort
+int particiona(int* A, int p, int r) {
+    int x = A[r];
+    int i = p - 1;
+
+    for (int j = p; j < r; j++) {
+        if (A[j] <= x) {
+            i++;
+            trocar(&A[i], &A[j]);
         }
     }
-    temp = A[i+1];
-    A[i+1] = A[r];
-    A[r] = temp;
-    return i+1;
-}*/
+
+    trocar(&A[i + 1], &A[r]);
+    return i + 1;
+}
 
 /* Ajustar
 // Essa função ordena um vetor utilizando o método Bubble Sort
@@ -61,14 +68,24 @@ int* bubble_sort(int* vetor, int tamanho_vetor){
     } return vetor;
 }*/
 
-/* Ajustar
+
 // Essa função ordena um vetor utilizando o método Quick Sort
-int* quick_sort(int* vetor, int tamanho_vetor){
-    if(p >= r) return;
-    int q = particiona(A, p, q-1);
-    quick_sort(A, p, q-1);
-    quick_sort(A, q+1, r);
-}*/
+int* quick_sort(int* vetor, int p, int r) {
+    if (p < r) {
+        int q = particiona(vetor, p, r);
+        quick_sort(vetor, p, q - 1);
+        quick_sort(vetor, q + 1, r);
+    }
+    return vetor;
+}
+
+void imprime_quickSort(int* vetor, int tamanho_vetor) {
+    printf("\nVetor ordenado:\n");
+    for (int i = 0; i < tamanho_vetor; i++) {
+        printf("pos[%d] = %d\n", i, vetor[i]);
+    }
+}
+
 
 /* Ajustar
 // Essa função ordena um vetor utilizando o método Merge Sort
@@ -284,7 +301,8 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                         //merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
                         break;
                     case 4:
-                        //quick_sort(v, tamanho_vetor);
+                        printf("=====================================================");
+                        imprime_quickSort(v, tamanho_vetor);
                         break;
                     case 5:
                         //bubble_sort(v, tamanho_vetor);
