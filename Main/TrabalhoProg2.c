@@ -13,7 +13,7 @@
 
 // Protótipos de função
 int* quick_sort(int* vetor, int p, int r);
-void imprime_quicksort(int* vetor, int tamanho_vetor);
+void imprime_quickSort(int* vetor, int tamanho_vetor);
 int* merge_sort(int* vetor, int p, int r);
 int* insertion_sort(int* v, int tamanho_vetor);
 double tempo_insertion(int* v, int tamanho_vetor);
@@ -23,9 +23,9 @@ double tempo_selection(int* v, int tamanho_vetor);
 void trocar(int* a, int* b);
 int particiona(int* A, int inicio, int fim);
 void imprime_selection(int* v, int tamanho_vetor);
-void desvioPadrao(int* v, int tamanho_vetor);
+double desvioPadrao(int* v, int tamanho_vetor);
 void vetor_random(int* vetor, int tamanho_vetor, int i);
-void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion);
+void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion, double tempoMerge, double tempoQuick, double desvio_padrao);
 // ===================================================================================
 
 void trocar(int* a, int* b) {
@@ -55,7 +55,7 @@ int particiona(int* A, int p, int r) {
 // Essa função ordena um vetor utilizando o método Quick Sort
 int* quick_sort(int* vetor, int p, int r) {
     if (p < r) {
-        particiona(vetor, p, r);
+        int q = particiona(vetor, p, r);
         quick_sort(vetor, p, q - 1);
         quick_sort(vetor, q + 1, r);
     }
@@ -68,6 +68,18 @@ void imprime_quickSort(int* vetor, int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {
         printf("pos[%d] = %d\n", i, vetor[i]);
     }
+}
+
+double tempo_quick(int* v, int tamanho_vetor, int p, int r){
+   double time_quick;
+
+    time_t start = time(NULL);
+    quick_sort(v, 0, tamanho_vetor - 1);
+    time_t end = time(NULL);
+
+    time_quick = end - start;
+
+    return time_quick;
 }
 // ===================================================================================
 
@@ -304,7 +316,7 @@ void vetor_random(int* vetor, int tamanho_vetor, int i){
 }
 // ===================================================================================
 
-void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion) {
+void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion, double tempoMerge, double tempoQuick, double desvio_padrao) {
     int op, cond = 1;
 
     while (cond == 1) {
@@ -341,7 +353,6 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                     case 3:
                         printf("=====================================================");
                         imprime_merge(v, tamanho_vetor);
-                        break;
                         break;
                     case 4:
                         printf("=====================================================");
@@ -381,11 +392,8 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                         break;
 
                     case 4:
-                        // quick_sort(v, tamanho_vetor);
-                        break;
-                    
-                    case 5:
-                        // bubble_sort(v, tamanho_vetor);
+                        printf("=====================================================");
+                        printf("\n\nO tempo gasto pelo Merge Sort foi: %f\n", tempoQuick);
                         break;
                 }
                 // -------------------------------------------------------
@@ -398,8 +406,7 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
             // Rodar 10x e calcular o desvio padrão
             case 3:
                 printf("=====================================================");
-                desvioPadrao
-            (v, tamanho_vetor);
+                printf("\nO desvio padrão é: %f\n", desvio_padrao);
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &cond);
@@ -434,12 +441,13 @@ int main(){
     vetor_random(vetor, tamanho_vetor, i);
     v = vetor;
 
-    double desvio = desvioPadrao(v, tamanho_vetor);
+    double desvio_padrao = desvioPadrao(v, tamanho_vetor);
     double tempoSelection = tempo_selection(v, tamanho_vetor);
     double tempoInsertion = tempo_insertion(v, tamanho_vetor);
     double tempoMerge = tempo_merge(v, tamanho_vetor, 0, tamanho_vetor - 1);
+    double tempoQuick = tempo_quick(v, tamanho_vetor, 0, tamanho_vetor - 1);
 
-    menu(v, tamanho_vetor, tempoSelection, tempoInsertion, tempoMerge, desvio);
+    menu(v, tamanho_vetor, tempoSelection, tempoInsertion, tempoMerge, tempoQuick, desvio_padrao);
     
     free(vetor);
     return 0;
