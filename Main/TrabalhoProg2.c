@@ -12,7 +12,6 @@
 */
 
 // Protótipos de função
-int* bubble_sort(int* vetor, int tamanho_vetor);
 int* quick_sort(int* vetor, int p, int r);
 void imprime_quicksort(int* vetor, int tamanho_vetor);
 int* merge_sort(int* vetor, int p, int r);
@@ -24,7 +23,7 @@ double tempo_selection(int* v, int tamanho_vetor);
 void trocar(int* a, int* b);
 int particiona(int* A, int inicio, int fim);
 void imprime_selection(int* v, int tamanho_vetor);
-void dp(int* v, int tamanho_vetor);
+void desvioPadrao(int* v, int tamanho_vetor);
 void vetor_random(int* vetor, int tamanho_vetor, int i);
 void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion);
 // ===================================================================================
@@ -34,7 +33,7 @@ void trocar(int* a, int* b) {
     *a = *b;
     *b = temp;
 }
-
+// ===================================================================================
 
 // Função de partição do Quick Sort
 int particiona(int* A, int p, int r) {
@@ -51,33 +50,18 @@ int particiona(int* A, int p, int r) {
     trocar(&A[i + 1], &A[r]);
     return i + 1;
 }
-
-/* Ajustar
-// Essa função ordena um vetor utilizando o método Bubble Sort
-int* bubble_sort(int* vetor, int tamanho_vetor){
-    int i, j, temp;
-    for(i = n-1; i>=0; i--){
-        for(j = 0; j<i; j++){
-            if(vetor[j] > vetor[j+1]){
-                temp = vetor[j];
-                vetor[j] = vetor[i];
-                vetor[i] = temp;
-
-            }
-        }
-    } return vetor;
-}*/
-
+// ===================================================================================
 
 // Essa função ordena um vetor utilizando o método Quick Sort
 int* quick_sort(int* vetor, int p, int r) {
     if (p < r) {
-        int q = particiona(vetor, p, r);
+        particiona(vetor, p, r);
         quick_sort(vetor, p, q - 1);
         quick_sort(vetor, q + 1, r);
     }
     return vetor;
 }
+// ===================================================================================
 
 void imprime_quickSort(int* vetor, int tamanho_vetor) {
     printf("\nVetor ordenado:\n");
@@ -85,40 +69,96 @@ void imprime_quickSort(int* vetor, int tamanho_vetor) {
         printf("pos[%d] = %d\n", i, vetor[i]);
     }
 }
+// ===================================================================================
 
-
-/* Ajustar
-// Essa função ordena um vetor utilizando o método Merge Sort
-int* merge_sort(int* vetor, int p, int q, int r){
+// Função de apoio para Merge Sort
+void particionaMerge(int primeiro_elemento, int meio, int ultimo, int* v) {
+    int tamanho1 = meio - primeiro_elemento + 1;
+    int tamanho2 = ultimo - meio;
+    int vetorEsquerdo[tamanho1], vetorDireito[tamanho2]; // Vetores Auxiliares
     int i, j, k;
-    int n1 = q - p + 1;
-    int n2 = r - q;
-    int* L;
-    int* R;
-    L = (int*) malloc((n1 +1)*sizeof(int));
-    R = (int*) malloc((n2 + 1)*sizeof(int));
 
-    for(i =0; i<n1; i++){
-        L[i] = vetor[p+i];
+    // Copia os elementos para os vetores auxiliares
+    for (i = 0; i < tamanho1; i++) {
+        vetorEsquerdo[i] = v[primeiro_elemento + i];
     }
-    for(j = 0; j<n2; j++){
-        R[j] = vetor[q+j+1];
+
+    for (j = 0; j < tamanho2; j++) {
+        vetorDireito[j] = v[meio + 1 + j];
     }
-    L[n1] = R[n2] = MAX;
-    i = j = 0;
-    for(k=p; k<=r; k++){
-        if(L[i] <= R[j]){
-            vetor[k] = L[i];
+
+    i = 0; // Índice do vetor esquerdo
+    j = 0; // Índice do vetor direito
+    k = primeiro_elemento; // Índice do vetor original
+
+    // Realiza a intercalação dos elementos ordenadamente
+    while (i < tamanho1 && j < tamanho2) {
+        if (vetorEsquerdo[i] <= vetorDireito[j]) {
+            v[k] = vetorEsquerdo[i];
             i++;
-        } else{ 
-            vetor[k] = R[j];
+        } else {
+            v[k] = vetorDireito[j];
             j++;
         }
+        k++;
     }
-    free(L);
-    free(R);
-    return vetor;
-}*/
+
+    // Copia elementos restantes do vetor esquerdo caso haja
+    while (i < tamanho1) {
+        v[k] = vetorEsquerdo[i];
+        i++;
+        k++;
+    }
+
+    // Copia elementos restantes do vetor direito caso haja
+    while (j < tamanho2) {
+        v[k] = vetorDireito[j];
+        j++;
+        k++;
+    }
+}
+// ===================================================================================
+
+// Essa função ordena um vetor utilizando o método Merge Sort
+int* merge_sort(int* v, int primeiro_elemento, int ultimo){
+
+   if (primeiro_elemento >= ultimo) return v; {                 
+      int meio = (primeiro_elemento + ultimo)/2;
+
+      merge_sort (v, primeiro_elemento, meio);        
+      merge_sort (v, meio + 1, ultimo);        
+      particionaMerge (primeiro_elemento, meio, ultimo, v); 
+
+      return v;
+    }
+}
+// ===================================================================================
+
+// Printa o vetor ordenado por Merge Sort
+void imprime_merge(int* v, int tamanho_vetor){
+    int i; int* merge;
+    merge = merge_sort(v, 0, tamanho_vetor - 1);
+
+    printf("\nVetor ordenado:\n");
+    for (i = 0; i < tamanho_vetor; i++){
+        printf("pos[%d] = %d\n", i, merge[i]);
+    }
+}
+// ===================================================================================
+
+// Calcula o tempo de execução do Merge Sort
+double tempo_merge(int* v, int tamanho_vetor, int primeiro_elemento, int ultimo){
+   double time_merge;
+
+    time_t start = time(NULL);
+    merge_sort(v, 0, tamanho_vetor - 1);
+    time_t end = time(NULL);
+
+    time_merge = end - start;
+
+    return time_merge;
+}
+// ===================================================================================
 
 // Essa função ordena um vetor utilizando o método Insertion Sort
 int* insertion_sort(int* v, int tamanho_vetor){
@@ -212,40 +252,42 @@ void imprime_selection(int* v, int tamanho_vetor){
 // ===================================================================================
 
 // Calcula desvio padrão entre os tempos.
-void dp(int* v, int tamanho_vetor) {
+double desvioPadrao(int* v, int tamanho_vetor) {
     int i;
-    double mediaS = 0, mediaI = 0, somaDesviosS = 0, somaDesviosI = 0, desvioS, desvioI;
+    double mediaS = 0, mediaI = 0, mediaM = 0, somaDesvios = 0, desvio;
     double valores_selection[10];
     double valores_insertion[10];
+    double valores_merge[10];
 
-    // Calcula os tempos de tempo_selection e armazena em valores_selection
+    // Armazena o tempo de execução do Selection Sort
     for(i = 0; i < 10; i++){
         valores_selection[i] = tempo_selection(v, tamanho_vetor);
         mediaS += valores_selection[i];
     }
     mediaS /= 10;
 
-    // Calcula os tempos de tempo_insertion e armazena em valores_insertion
+    // Armazena o tempo de execução do Insertion Sort
     for(i = 0; i < 10; i++){
         valores_insertion[i] = tempo_insertion(v, tamanho_vetor);
         mediaI += valores_insertion[i];
     }
     mediaI /= 10;
 
-    // Calcula o desvio padrão para tempo_selection
+    // Armazena o tempo de execução do Merge Sort
     for(i = 0; i < 10; i++){
-        somaDesviosS += pow(valores_selection[i] - mediaS, 2);
+        valores_merge[i] = tempo_merge(v, tamanho_vetor, 0, tamanho_vetor - 1);
+        mediaM += valores_merge[i];
     }
-    desvioS = sqrt(somaDesviosS / 10);
-    printf("\nO desvio padrão de Selection Sort foi: %f", desvioS);
+    mediaM /= 10;
 
-    // Calcula o desvio padrão para tempo_insertion
-    somaDesviosI = 0;
+
+    // Calcula o desvio padrão entre os tempos de execução
     for(i = 0; i < 10; i++){
-        somaDesviosI += pow(valores_insertion[i] - mediaI, 2);
+        somaDesvios += pow(valores_selection[i] - valores_insertion[i] - valores_merge[i], 2);
     }
-    desvioI = sqrt(somaDesviosI / 10);
-    printf("\nO desvio padrão de Insertion Sort foi: %f\n", desvioI);
+    desvio = sqrt(somaDesvios / 10);
+
+    return desvio;
 }
 
 // ===================================================================================
@@ -284,7 +326,6 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 printf("2 - Insertion Sort\n");
                 printf("3 - Merge Sort\n");
                 printf("4 - Quick Sort\n");
-                printf("5 - Bubble Sort\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &op_ord);
                 // Switch interno
@@ -298,16 +339,14 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                         imprime_insertion(v, tamanho_vetor);
                         break;
                     case 3:
-                        //merge_sort(v, 0, (tamanho_vetor/2)-1, tamanho_vetor-1);
+                        printf("=====================================================");
+                        imprime_merge(v, tamanho_vetor);
+                        break;
                         break;
                     case 4:
                         printf("=====================================================");
                         imprime_quickSort(v, tamanho_vetor);
                         break;
-                    case 5:
-                        //bubble_sort(v, tamanho_vetor);
-                        break;
-                
                 }
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
@@ -322,7 +361,6 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 printf("2 - Insertion Sort\n");
                 printf("3 - Merge Sort\n");
                 printf("4 - Quick Sort\n");
-                printf("5 - Bubble Sort\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &op_ord);
                 //Switch interno
@@ -338,9 +376,10 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                         break;
                     
                     case 3:
-                        // merge_sort(v, tamanho_vetor);
+                        printf("=====================================================");
+                        printf("\n\nO tempo gasto pelo Merge Sort foi: %f\n", tempoMerge);
                         break;
-                    
+
                     case 4:
                         // quick_sort(v, tamanho_vetor);
                         break;
@@ -359,7 +398,8 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
             // Rodar 10x e calcular o desvio padrão
             case 3:
                 printf("=====================================================");
-                dp(v, tamanho_vetor);
+                desvioPadrao
+            (v, tamanho_vetor);
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
                 printf("Escolha uma das ordenações acima: ");
                 scanf("%d", &cond);
@@ -393,12 +433,14 @@ int main(){
 
     vetor_random(vetor, tamanho_vetor, i);
     v = vetor;
-    
+
+    double desvio = desvioPadrao(v, tamanho_vetor);
     double tempoSelection = tempo_selection(v, tamanho_vetor);
     double tempoInsertion = tempo_insertion(v, tamanho_vetor);
+    double tempoMerge = tempo_merge(v, tamanho_vetor, 0, tamanho_vetor - 1);
 
-    menu(v, tamanho_vetor, tempoSelection, tempoInsertion);
-
+    menu(v, tamanho_vetor, tempoSelection, tempoInsertion, tempoMerge, desvio);
+    
     free(vetor);
     return 0;
 }
