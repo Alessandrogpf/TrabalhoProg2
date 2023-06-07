@@ -1,3 +1,9 @@
+/* ============================ ATENÇÃO!!!!!! ============================
+        Por favor, compile o código da seguinte forma:
+        "gcc programa.c -lm"
+        Caso contrário dará erro por conta da utilização da biblioteca math.h
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -5,15 +11,9 @@
 #include <limits.h>
 #define MAX INT_MAX
 
-/* ============================ ATENÇÃO!!!!!! ============================
-        Por favor, compile o código da seguinte forma:
-        "gcc programa.c -lm"
-        Caso contrário dará erro por conta da utilização da biblioteca math.h
-*/
-
 // Protótipos de função
 int* quick_sort(int* vetor, int p, int r);
-void imprime_quickSort(int* vetor, int tamanho_vetor);
+void imprime_quick(int* vetor, int tamanho_vetor);
 int* merge_sort(int* vetor, int p, int r);
 int* insertion_sort(int* v, int tamanho_vetor);
 double tempo_insertion(int* v, int tamanho_vetor);
@@ -28,11 +28,6 @@ void vetor_random(int* vetor, int tamanho_vetor, int i);
 void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertion, double tempoMerge, double tempoQuick, double desvio_padrao);
 // ===================================================================================
 
-void trocar(int* a, int* b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
 // ===================================================================================
 
 // Função de partição do Quick Sort
@@ -50,6 +45,12 @@ int particiona(int* A, int p, int r) {
     trocar(&A[i + 1], &A[r]);
     return i + 1;
 }
+// Funcao de auxilio ao particiona do Quick Sort
+void trocar(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 // ===================================================================================
 
 // Essa função ordena um vetor utilizando o método Quick Sort
@@ -63,21 +64,30 @@ int* quick_sort(int* vetor, int p, int r) {
 }
 // ===================================================================================
 
-void imprime_quickSort(int* vetor, int tamanho_vetor) {
-    printf("\nVetor ordenado:\n");
+void imprime_quick(int* v, int tamanho_vetor) {
+    int i; int* quick;
+    quick = quick_sort(v, 0, tamanho_vetor - 1);
+
+    printf("\nVetor ordenado pelo Quick Sort:\n");
     for (int i = 0; i < tamanho_vetor; i++) {
-        printf("pos[%d] = %d\n", i, vetor[i]);
+        printf("%d", quick[i]);
+        if (i == tamanho_vetor -1) {
+            printf(".");
+        } else {
+            printf(", ");
+        }
     }
 }
 
 double tempo_quick(int* v, int tamanho_vetor, int p, int r){
    double time_quick;
 
-    time_t start = time(NULL);
+    clock_t start = clock();
     quick_sort(v, 0, tamanho_vetor - 1);
-    time_t end = time(NULL);
+    clock_t end = clock();
 
-    time_quick = end - start;
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    time_quick = cpu_time_used;
 
     return time_quick;
 }
@@ -151,9 +161,14 @@ void imprime_merge(int* v, int tamanho_vetor){
     int i; int* merge;
     merge = merge_sort(v, 0, tamanho_vetor - 1);
 
-    printf("\nVetor ordenado:\n");
+    printf("\nVetor ordenado pelo Merge Sort:\n");
     for (i = 0; i < tamanho_vetor; i++){
-        printf("pos[%d] = %d\n", i, merge[i]);
+        printf("%d", merge[i]);
+        if (i == tamanho_vetor -1) {
+            printf(".");
+        } else {
+            printf(", ");
+        }
     }
 }
 // ===================================================================================
@@ -162,11 +177,12 @@ void imprime_merge(int* v, int tamanho_vetor){
 double tempo_merge(int* v, int tamanho_vetor, int primeiro_elemento, int ultimo){
    double time_merge;
 
-    time_t start = time(NULL);
+    clock_t start = clock();
     merge_sort(v, 0, tamanho_vetor - 1);
-    time_t end = time(NULL);
+    clock_t end = clock();
 
-    time_merge = end - start;
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    time_merge = cpu_time_used;
 
     return time_merge;
 }
@@ -194,9 +210,14 @@ void imprime_insertion(int* v, int tamanho_vetor){
     int i; int* insertion;
     insertion = insertion_sort(v, tamanho_vetor);
 
-    printf("\nVetor ordenado:\n");
+    printf("\nVetor ordenado pelo Insertion Sort:\n");
     for (i = 0; i < tamanho_vetor; i++){
-        printf("pos[%d] = %d\n", i, insertion[i]);
+        printf("%d", insertion[i]);
+        if (i == tamanho_vetor -1) {
+            printf(".");
+        } else {
+            printf(", ");
+        }
     }
 }
 // ===================================================================================
@@ -205,11 +226,12 @@ void imprime_insertion(int* v, int tamanho_vetor){
 double tempo_insertion(int* v, int tamanho_vetor){
    double time_insertion;
 
-    time_t start = time(NULL);
+    clock_t start = clock();
     insertion_sort(v,tamanho_vetor);
-    time_t end = time(NULL);
+    clock_t end = clock();
 
-    time_insertion = end - start;
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    time_insertion = cpu_time_used;
 
     return time_insertion;
 }
@@ -241,11 +263,12 @@ int* selection_sort(int* v, int tamanho_vetor){
 double tempo_selection(int* v, int tamanho_vetor){
     double time_selection;
 
-    time_t start = time(NULL);
+    clock_t start = clock();
     selection_sort(v,tamanho_vetor);
-    time_t end = time(NULL);
+    clock_t end = clock();
 
-    time_selection = end - start;
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    time_selection = cpu_time_used;
 
     return time_selection;
 }
@@ -256,9 +279,14 @@ void imprime_selection(int* v, int tamanho_vetor){
     int i; int* selection;
     selection = selection_sort(v, tamanho_vetor);
 
-    printf("\nVetor ordenado:\n");
+    printf("\nVetor ordenado pelo Selection Sort:\n");
     for (i = 0; i < tamanho_vetor; i++){
-        printf("pos[%d] = %d\n", i, selection[i]);
+        printf("%d", selection[i]);
+        if (i == tamanho_vetor - 1) {
+            printf(".");
+        } else {
+            printf(", ");
+        }
     }
 }
 // ===================================================================================
@@ -310,8 +338,13 @@ void vetor_random(int* vetor, int tamanho_vetor, int i){
     srand((unsigned) time(NULL));
     printf("\nVetor não ordenado:\n");
     for (i = 0; i < tamanho_vetor; i++){
-        vetor[i] = rand() % 10;
-        printf("pos[%d] = %d\n", i, vetor[i]);
+        vetor[i] = rand() % 100;
+        printf("%d", vetor[i]);
+        if (i == tamanho_vetor - 1) {
+            printf(".");
+        } else {
+            printf(", ");
+        }
     }
 }
 // ===================================================================================
@@ -356,11 +389,11 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                         break;
                     case 4:
                         printf("=====================================================");
-                        imprime_quickSort(v, tamanho_vetor);
+                        imprime_quick(v, tamanho_vetor);
                         break;
                 }
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
-                printf("Escolha uma das ordenações acima: ");
+                printf("Escolha uma das opções acima: ");
                 scanf("%d", &cond);
                 if (cond == 0){printf("\nPrograma encerrado!\n"); break;}
                 break;
@@ -393,12 +426,12 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
 
                     case 4:
                         printf("=====================================================");
-                        printf("\n\nO tempo gasto pelo Merge Sort foi: %f\n", tempoQuick);
+                        printf("\n\nO tempo gasto pelo Quick Sort foi: %f\n", tempoQuick);
                         break;
                 }
                 // -------------------------------------------------------
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
-                printf("Escolha uma das ordenações acima: ");
+                printf("Escolha uma das opções acima: ");
                 scanf("%d", &cond);
                 if (cond == 0){printf("\nPrograma encerrado!\n"); break;}
                 break;
@@ -408,7 +441,7 @@ void menu(int* v, int tamanho_vetor, double tempoSelection, double tempoInsertio
                 printf("=====================================================");
                 printf("\nO desvio padrão é: %f\n", desvio_padrao);
                 printf("\nDeseja fazer outra operação?\n1 - Sim\n0 - Encerrar\n");
-                printf("Escolha uma das ordenações acima: ");
+                printf("Escolha uma das opções acima: ");
                 scanf("%d", &cond);
                 if (cond == 0){printf("\nPrograma encerrado!\n"); break;}
                 break;
