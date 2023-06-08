@@ -294,36 +294,44 @@ void imprime_selection(int* v, int tamanho_vetor){
 // Calcula desvio padrão entre os tempos.
 double desvioPadrao(int* v, int tamanho_vetor) {
     int i;
-    double mediaS = 0, mediaI = 0, mediaM = 0, somaDesvios = 0, desvio;
+    double mediaSelection = 0, mediaInsertion = 0, mediaMerge = 0, mediaQuick = 0, somaDesvios = 0, desvio;
     double valores_selection[10];
     double valores_insertion[10];
     double valores_merge[10];
+    double valores_quick[10];
 
     // Armazena o tempo de execução do Selection Sort
     for(i = 0; i < 10; i++){
         valores_selection[i] = tempo_selection(v, tamanho_vetor);
-        mediaS += valores_selection[i];
+        mediaSelection += valores_selection[i];
     }
-    mediaS /= 10;
+    mediaSelection /= 10;
 
     // Armazena o tempo de execução do Insertion Sort
     for(i = 0; i < 10; i++){
         valores_insertion[i] = tempo_insertion(v, tamanho_vetor);
-        mediaI += valores_insertion[i];
+        mediaInsertion += valores_insertion[i];
     }
-    mediaI /= 10;
+    mediaInsertion /= 10;
 
     // Armazena o tempo de execução do Merge Sort
     for(i = 0; i < 10; i++){
         valores_merge[i] = tempo_merge(v, tamanho_vetor, 0, tamanho_vetor - 1);
-        mediaM += valores_merge[i];
+        mediaMerge += valores_merge[i];
     }
-    mediaM /= 10;
+    mediaMerge /= 10;
 
+    // Armazena o tempo de execução do Quick Sort
+    for(i = 0; i < 10; i++){
+        valores_quick[i] = tempo_quick(v, tamanho_vetor, 0, tamanho_vetor - 1);
+        mediaQuick += valores_quick[i];
+    }
+
+    mediaQuick /= 10;
 
     // Calcula o desvio padrão entre os tempos de execução
     for(i = 0; i < 10; i++){
-        somaDesvios += pow(valores_selection[i] - valores_insertion[i] - valores_merge[i], 2);
+        somaDesvios += pow(valores_selection[i] - valores_insertion[i] - valores_quick[i] - valores_merge[i], 2);
     }
     desvio = sqrt(somaDesvios / 10);
 
